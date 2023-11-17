@@ -14,6 +14,11 @@ const NavLinks = props => {
           ALL USERS
         </NavLink>
       </li>
+      <li>
+        <NavLink to="/asd" exact>
+          ALL SONGS
+        </NavLink>
+      </li>
       {auth.isLoggedIn && (
         <li>
           <NavLink to="/u1/places">MY SONGS</NavLink>
@@ -22,6 +27,11 @@ const NavLinks = props => {
       {auth.isLoggedIn && (
         <li>
           <NavLink to="/places/new">ADD SONGS</NavLink>
+        </li>
+      )}
+      {auth.isLoggedIn && (
+        <li>
+          <NavLink to="/recommendations">RECOMMENDATIONS</NavLink>
         </li>
       )}
       {!auth.isLoggedIn && (
