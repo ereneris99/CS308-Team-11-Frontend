@@ -8,6 +8,10 @@ This is the frontend repository for the CS308 project by Team 11. It's a React-b
 - **Song Browsing**: Explore a wide range of songs.
 - **Personalized Playlists**: Create and manage custom playlists.
 - **Song Recommendations**: Get song recommendations based on your taste.
+- **Users Page**: Displays a list of all users. This feature allows users to see other members of the platform.
+- **My Songs Page**: Showcases the songs added by the user. Users can view and manage their own song collection.
+- **Add Song Page**: Enables users to manually add songs to the platform. This feature allows for the expansion of the song library by user contributions.
+- **Authentication Page**: A dedicated page for users to log in or sign up. This page facilitates user access to the platform's features.
 
 ## Getting Started
 
