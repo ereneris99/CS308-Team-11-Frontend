@@ -13,6 +13,8 @@ import UpdatePlace from './places/pages/UpdatePlace';
 import Auth from './user/pages/Auth';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
+import Songs from './places/pages/Songs';
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,6 +34,9 @@ const App = () => {
       <Switch>
         <Route path="/" exact>
           <Users />
+        </Route>
+        <Route path="/songs" exact>
+          <Songs />
         </Route>
         <Route path="/:userId/places" exact>
           <UserPlaces />

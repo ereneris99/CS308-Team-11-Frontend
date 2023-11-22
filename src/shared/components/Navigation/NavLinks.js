@@ -15,7 +15,7 @@ const NavLinks = props => {
         </NavLink>
       </li>
       <li>
-        <NavLink to="/asd" exact>
+        <NavLink to="/songs" exact>
           ALL SONGS
         </NavLink>
       </li>
