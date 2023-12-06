@@ -5,9 +5,9 @@ import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
 import Map from '../../shared/components/UIElements/Map';
 import { AuthContext } from '../../shared/context/auth-context';
-import './PlaceItem.css';
+import './SongItem.css';
 
-const PlaceItem = props => {
+const SongItem = props => {
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -94,4 +94,4 @@ const PlaceItem = props => {
   );
 };
 
-export default PlaceItem;
+export default SongItem;

@@ -64,7 +64,7 @@ const Auth = () => {
 
     if (isLoginMode) {
          try {
-          await sendRequest(
+         const responseData = await sendRequest(
             'http://localhost:3000/login',
             'POST',
             JSON.stringify({
@@ -76,18 +76,14 @@ const Auth = () => {
               }
                
             );
-          auth.login();
+          auth.login(responseData.userI, responseData.token);
          } catch (err) {
    }
          
-
-
-  
-        
       
     } else {
       try {
-         await sendRequest(
+        const responseData = await sendRequest(
           'http://localhost:3000/signup',
           'PUT',
           JSON.stringify({
@@ -100,7 +96,7 @@ const Auth = () => {
         );
 
        
-        auth.login();
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     }
   };

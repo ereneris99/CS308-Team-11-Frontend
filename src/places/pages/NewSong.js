@@ -1,15 +1,21 @@
-import React from 'react';
+import React ,{useContext} from 'react';
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import {
   VALIDATOR_REQUIRE,
   //VALIDATOR_MINLENGTH
 } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
-import './PlaceForm.css';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import {AuthContext} from '../../shared/context/auth-context';
+import './SongForm.css';
 
-const NewPlace = () => {
+const NewSong = () => {
+  const auth = useContext(AuthContext);
+  const {isLoading,error,sendRequest,clearError} = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -32,13 +38,26 @@ const NewPlace = () => {
     false
   );
 
-  const placeSubmitHandler = event => {
+  const placeSubmitHandler = async event => {
     event.preventDefault();
-    console.log(formState.inputs); // send this to the backend!
+    try{await sendRequest('http://localhost:3000/add-song','POST',JSON.stringify({
+      title: formState.inputs.title.value,
+      album: formState.inputs.album.value,
+      artist: formState.inputs.artist.value,
+      rating: formState.inputs.rating.value,
+      //creator: auth.userId
+    }),{Authorization:'Bearer ' + auth.token }
+    );
+    }
+    //redirect user to a different page
+   catch(err){} 
   };
 
   return (
-    <form className="place-form" onSubmit={placeSubmitHandler}>
+    <React.Fragment>
+      <ErrorModal error={error} onClear={clearError}/>
+    <form className="song-form" onSubmit={placeSubmitHandler}>
+      {isLoading && <LoadingSpinner asOverlay/>}
       <Input
         id="title"
         element="input"
@@ -77,7 +96,8 @@ const NewPlace = () => {
         ADD SONG
       </Button>
     </form>
+    </React.Fragment>
   );
 };
 
-export default NewPlace;
+export default NewSong;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PlaceItem from './PlaceItem';
+import SongItem from './SongItem';
 import Card from '../../shared/components/UIElements/Card';
 import './SongsList.css';
 
@@ -9,16 +9,16 @@ const SongsList = props => {
     return (
       <div className="center">
         <Card>
-          <h2>No users found.</h2>
+          <h2>No songs found.</h2>
         </Card>
       </div>
     );
   }
 
   return (
-    <ul className="users-list">
+    <ul className="songs-list">
       {props.items.map(place => (
-        <PlaceItem
+        <SongItem
         key={place.id}
         id={place.id}
         image={place.imageUrl}
