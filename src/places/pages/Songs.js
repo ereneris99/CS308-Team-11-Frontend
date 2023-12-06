@@ -10,14 +10,14 @@ const Songs = () => {
   const [loadedSongs, setLoadedSongs] = useState();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchSongs = async () => {
       try {
         const responseData = await sendRequest('http://localhost:3000/songs');
 
         setLoadedSongs(responseData.songs);
       } catch (err) {}
     };
-    fetchUsers();
+    fetchSongs();
   }, [sendRequest]);
 
 
