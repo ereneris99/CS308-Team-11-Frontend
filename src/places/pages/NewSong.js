@@ -26,7 +26,7 @@ const NewSong = () => {
         value: '',
         isValid: false
       },
-      artist: {
+      performer: {
         value: '',
         isValid: false
       },
@@ -40,17 +40,29 @@ const NewSong = () => {
 
   const placeSubmitHandler = async event => {
     event.preventDefault();
-    try{await sendRequest('http://localhost:3000/add-song','POST',JSON.stringify({
-      title: formState.inputs.title.value,
-      album: formState.inputs.album.value,
-      artist: formState.inputs.artist.value,
-      rating: formState.inputs.rating.value,
-      //creator: auth.userId
-    }),{Authorization:'Bearer ' + auth.token }
-    );
-    }
-    //redirect user to a different page
-   catch(err){} 
+    try {
+      // Prepare the data to be sent to the backend
+      const songData = {
+        title: formState.inputs.title.value,
+        performer: formState.inputs.performer.value.split(','), // Splitting by comma for multiple performers
+        album: formState.inputs.album.value,
+        rating: formState.inputs.rating.value
+      };
+
+      // Send a POST request to the backend
+      await sendRequest(
+        'http://localhost:3000/admin/add-song',
+        'POST',
+        JSON.stringify(songData),
+        {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + auth.token
+        }
+      );
+
+      // Handle successful submission here
+      // For example, redirecting the user or showing a success message
+    } catch (err){} 
   };
 
   return (
@@ -76,9 +88,9 @@ const NewSong = () => {
         onInput={inputHandler}
       />
       <Input
-        id="artist"
+        id="performer"
         element="input"
-        label="Artist"
+        label="Performer"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid Artist."
         onInput={inputHandler}

@@ -61,7 +61,6 @@ const Auth = () => {
   const authSubmitHandler = async event => {
     event.preventDefault();
     
-
     if (isLoginMode) {
          try {
          const responseData = await sendRequest(
@@ -80,7 +79,6 @@ const Auth = () => {
          } catch (err) {
    }
          
-      
     } else {
       try {
         const responseData = await sendRequest(
