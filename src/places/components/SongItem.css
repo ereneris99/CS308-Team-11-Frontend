@@ -1,60 +1,57 @@
-.place-item {
+.song-item {
   margin: 1rem 0;
+  background-color: #121212; /* Spotify dark background */
+  color: #fff; /* Light text for contrast */
+  border-radius: 8px;
 }
 
-.place-item__content {
-  padding: 0;
-}
-
-.place-item__info {
+.song-item__content {
   padding: 1rem;
+}
+
+.song-item__info {
   text-align: center;
 }
 
-.place-item__image {
-  width: 100%;
-  height: 12.5rem;
-  margin-right: 1.5rem;
+.song-item__info h2,
+.song-item__info h3,
+.song-item__info p {
+  margin: 0.5rem 0;
+  color: #000000; /* Spotify green for titles */
 }
 
-.place-item__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.place-item__info h2,
-.place-item__info h3,
-.place-item__info p {
-  margin: 0 0 0.5rem 0;
-}
-
-.place-item__actions {
+.song-item__actions {
   padding: 1rem;
   text-align: center;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #282828; /* Slightly lighter border for separation */
 }
 
-.place-item__modal-content {
-  padding: 0;
-}
-
-.place-item__modal-actions {
-  text-align: right;
-}
-
-.place-item__actions button,
-.place-item__actions a {
+.song-item__actions button,
+.song-item__actions a {
   margin: 0.5rem;
+  background-color: #1DB954; /* Spotify green for buttons */
+  color: #fff;
+  border: none;
 }
 
-.map-container {
-  height: 15rem;
-  width: 100%;
+.song-item__actions button:hover,
+.song-item__actions a:hover {
+  background-color: #1ED760; /* Lighter green on hover */
 }
+
+.song-item__modal-content {
+  padding: 0;
+  background-color: #121212; /* Consistent modal background */
+}
+
+.song-item__modal-actions {
+  text-align: right;
+  background-color: #121212; /* Consistent modal actions background */
+}
+
 
 @media (min-width: 768px) {
-  .place-item__image {
+  .song-item__image {
     height: 20rem;
   } 
 }

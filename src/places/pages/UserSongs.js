@@ -1,42 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
 import SongsList from '../components/SongsList';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
-const DUMMY_PLACES = [
-  {
-    id: 'p1',
-    title: 'Aşkın Olayım',
-    album: 'Ben Bazen',
-    imageUrl:'https://kultur.istanbul/gorsel/2022/10/simge-roportaj.jpg',
-    artist: 'Simge Sağın',
-
-    creator: 'u1'
-  },
-  {
-    id: 'p2',
-    title: 'Freed From Desire',
-    album: 'Come into My Life',
-    imageUrl:'https://lastfm.freetls.fastly.net/i/u/ar0/37dddef1a3b06da9689cadb5421f2f7b.jpg',
-    artist: 'Gala',
-
-    creator: 'u1',
-  },
-  {
-    id: 'p2',
-    title: 'Freed From Desire',
-    album: 'Come into My Life',
-    imageUrl:'https://lastfm.freetls.fastly.net/i/u/ar0/37dddef1a3b06da9689cadb5421f2f7b.jpg',
-    artist: 'Gala',
-
-    creator: 'u2',
-  }
-];
 
 const UserSongs = () => {
+const [loadedSongs, setLoadedSongs] = useState();
+const {isLoading,error,sendRequest,clearError}=useHttpClient();
+
   const userId = useParams().userId;
-  const loadedPlaces = DUMMY_PLACES.filter(place => place.creator === userId);
-  return <SongsList items={loadedPlaces} />;
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:3000/list-likesong/${userId}`
+        );
+        setLoadedSongs(responseData.likesongs); // Update to 'likesongs'
+      } catch (err) {}
+    };
+    fetchSongs();
+  }, [sendRequest, userId]);
+
+ 
+  return <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && (<div 
+        className="center"><LoadingSpinner />
+      </div>
+      )}
+      {!isLoading && loadedSongs && <SongsList items={loadedSongs} />}
+    </React.Fragment>;
 };
 
 export default UserSongs;

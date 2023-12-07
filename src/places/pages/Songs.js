@@ -20,6 +20,10 @@ const Songs = () => {
     fetchSongs();
   }, [sendRequest]);
 
+  const songDeletedHandler = deletedSongId => {
+    setLoadedSongs(prevSongs => prevSongs.filter(song => song._id !== deletedSongId)
+    );
+  };
 
   return (
     <React.Fragment>
@@ -29,7 +33,7 @@ const Songs = () => {
           <LoadingSpinner />
         </div>
       )}
-      {!isLoading && loadedSongs && <SongsList items={loadedSongs} />}
+      {!isLoading && loadedSongs && <SongsList items={loadedSongs} onDeleteSong = {songDeletedHandler} />}
     </React.Fragment>
   );
 };

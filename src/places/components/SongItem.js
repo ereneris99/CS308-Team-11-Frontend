@@ -3,18 +3,17 @@ import React, { useState, useContext } from 'react';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
-import Map from '../../shared/components/UIElements/Map';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { AuthContext } from '../../shared/context/auth-context';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 import './SongItem.css';
 
 const SongItem = props => {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
-  const [showMap, setShowMap] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  const openMapHandler = () => setShowMap(true);
-
-  const closeMapHandler = () => setShowMap(false);
 
   const showDeleteWarningHandler = () => {
     setShowConfirmModal(true);
@@ -24,30 +23,38 @@ const SongItem = props => {
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
+
+  const confirmDeleteHandler = async () => {
+    console.log('Deleting song with ID:', props.id); // Check the ID
     setShowConfirmModal(false);
-    console.log('DELETING...');
+    try {
+      await sendRequest(
+        `http://localhost:3000/admin/delete-song/${props.id}`,
+        'DELETE',
+        null,
+        {
+          Authorization: 'Bearer ' + auth.token
+        }
+      );
+  
+      props.onDelete(props.id);
+
+    } catch (err) {}
+  };
+
+  const toggleLikeHandler = () => {
+    setIsLiked(prev => !prev);
+    // Optionally, send a request to the backend to record the like
   };
 
   return (
     <React.Fragment>
-      <Modal
-        show={showMap}
-        onCancel={closeMapHandler}
-        header={props.artist}
-        contentClass="place-item__modal-content"
-        footerClass="place-item__modal-actions"
-        footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
-      >
-        <div className="map-container">
-          <Map center={props.coordinates} zoom={16} />
-        </div>
-      </Modal>
+      <ErrorModal error={error} onClear={clearError} />
       <Modal
         show={showConfirmModal}
         onCancel={cancelDeleteHandler}
         header="Are you sure?"
-        footerClass="place-item__modal-actions"
+        footerClass="song-item__modal-actions"
         footer={
           <React.Fragment>
             <Button inverse onClick={cancelDeleteHandler}>
@@ -64,24 +71,21 @@ const SongItem = props => {
           can't be undone thereafter.
         </p>
       </Modal>
-      <li className="place-item">
-        <Card className="place-item__content">
-          <div className="place-item__image">
-            <img src={props.image} alt={props.title} />
-          </div>
-          <div className="place-item__info">
-            <h2>{props.title}</h2>
-            <h3>{props.artist}</h3>
-            <p>{props.album}</p>
-          </div>
-          <div className="place-item__actions">
-            <Button inverse onClick={openMapHandler}>
-              Go to This Song
+      <li className="song-item">
+        <Card className="song-item__content">
+          {isLoading && <LoadingSpinner asOverlay />}
+          <div className="song-item__info">
+          <h2>{props.title}</h2>
+          <h3>Album: {props.album.name}</h3>
+          <p>Performer: {props.performer.name}</p>
+                  </div>
+          <div className="song-item__actions">
+            <Button inverse onClick={toggleLikeHandler}>
+              {isLiked ? 'Unlike' : 'Like'}
             </Button>
             {auth.isLoggedIn && (
-              <Button to={`/places/${props.id}`}>EDIT</Button>
+              <Button to={`/songs/${props.id}`}>EDIT</Button>
             )}
-
             {auth.isLoggedIn && (
               <Button danger onClick={showDeleteWarningHandler}>
                 DELETE

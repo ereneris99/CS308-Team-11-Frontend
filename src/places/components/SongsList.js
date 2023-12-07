@@ -17,16 +17,16 @@ const SongsList = props => {
 
   return (
     <ul className="songs-list">
-      {props.items.map(place => (
+      {props.items.map(song => (
         <SongItem
-        key={place.id}
-        id={place.id}
-        image={place.imageUrl}
-        title={place.title}
-        album={place.album}
-        artist={place.artist}
-        creatorId={place.creator}
-        coordinates={place.location}
+          key={song._id}
+          id={song._id}
+          image={song.imageUrl}
+          title={song.title}
+          album={song.album}
+          performer={song.performer}
+          creatorId={song.creator}
+          onDelete={props.onDeleteSong} // Assuming onDeleteSong is a prop passed to SongsList
         />
       ))}
     </ul>

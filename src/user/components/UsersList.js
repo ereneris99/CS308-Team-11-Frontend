@@ -19,8 +19,8 @@ const UsersList = props => {
     <ul className="users-list">
       {props.items.map(user => (
         <UserItem
-          key={user.id}
-          id={user.id}
+          key={user._id}
+          id={user._id}
           email={user.email}
           password={user.password}
           image={user.image}
