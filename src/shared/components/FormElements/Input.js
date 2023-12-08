@@ -68,21 +68,19 @@ const Input = props => {
       onBlur={touchHandler}
       value={inputState.value}
     />
-  ) : (
+  ) : props.element === 'select' ? (
     <select
       id={props.id}
       onChange={changeHandler}
       onBlur={touchHandler}
       value={inputState.value}
     >
-      <option value="">Please select</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
+      <option value="">{props.placeholder}</option>
+      {props.options && props.options.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
     </select>
-    );
+  ) : null; // Handle other cases or return null
 
   return (
     <div

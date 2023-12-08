@@ -16,7 +16,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const NewSong = () => {
   const auth = useContext(AuthContext);
-  const {isLoading,error,sendRequest,clearError} = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -31,10 +31,15 @@ const NewSong = () => {
         value: '',
         isValid: false
       },
+      genre: {
+        value: '',
+        isValid: false // Set initial validity to true for optional field
+      },
       rating: {
         value: '',
-        isValid: false
+        isValid: true // Set initial validity to true for optional field
       }
+      
     },
     false
   );
@@ -43,8 +48,15 @@ const NewSong = () => {
 
   const placeSubmitHandler = async event => {
     event.preventDefault();
+    const isFormValid = formState.inputs.title.isValid &&
+                        formState.inputs.album.isValid &&
+                        formState.inputs.performer.isValid;
+
+    if (!isFormValid) {
+      return; // Prevent form submission if required fields are not valid
+    }
+
     try {
-      // Prepare the data to be sent to the backend
       const songData = {
         title: formState.inputs.title.value,
         performer: formState.inputs.performer.value.split(','), // Splitting by comma for multiple performers
@@ -52,7 +64,6 @@ const NewSong = () => {
         rating: formState.inputs.rating.value
       };
 
-      // Send a POST request to the backend
       await sendRequest(
         'http://localhost:3000/admin/add-song',
         'POST',
@@ -63,54 +74,64 @@ const NewSong = () => {
         }
       );
       history.push('/songs');
-      // Handle successful submission here
-      // For example, redirecting the user or showing a success message
-    } catch (err){} 
+    } catch (err) {
+      // Error handling
+    }
   };
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={clearError}/>
-    <form className="song-form" onSubmit={placeSubmitHandler}>
-      {isLoading && <LoadingSpinner asOverlay/>}
-      <Input
-        id="title"
-        element="input"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid title."
-        onInput={inputHandler}
-      />
-      <Input
-        id="album"
-        element="input"
-        label="Album"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid album."
-        onInput={inputHandler}
-      />
-      <Input
-        id="performer"
-        element="input"
-        label="Performer"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid Artist."
-        onInput={inputHandler}
-      />
-      <Input
-        id="rating"
-        element="select"
-        label="Rating"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please select a rating."
-        onInput={inputHandler}
-    /> 
-
-      <Button type="submit" disabled={!formState.isValid}>
-        ADD SONG
-      </Button>
-    </form>
+      <ErrorModal error={error} onClear={clearError} />
+      <form className="song-form" onSubmit={placeSubmitHandler}>
+        {isLoading && <LoadingSpinner asOverlay />}
+        <Input
+          id="title"
+          element="input"
+          type="text"
+          label="Title"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a valid title."
+          onInput={inputHandler}
+        />
+        <Input
+          id="album"
+          element="input"
+          label="Album"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a valid album."
+          onInput={inputHandler}
+        />
+        <Input
+          id="performer"
+          element="input"
+          label="Performer"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a valid performer."
+          onInput={inputHandler}
+        />
+        <Input
+          id="genre"
+          element="select"
+          label="Genre"
+          validators={[VALIDATOR_REQUIRE()]}
+          options={["Pop", "Rock", "Jazz", "Classical", "Hip Hop", "Electronic", "Country", "Other"]} // Array of genre options
+          onInput={inputHandler}
+          placeholder="Select Genre"
+        />
+        <Input
+          id="rating"
+          element="select"
+          label="Rating"
+          validators={[]}
+          options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]} // Rating options
+          onInput={inputHandler}
+          placeholder="Select Rating"
+        />
+        
+        <Button type="submit" disabled={!formState.inputs.title.isValid || !formState.inputs.album.isValid || !formState.inputs.performer.isValid || !formState.inputs.genre.isValid}>
+          ADD SONG
+        </Button>
+      </form>
     </React.Fragment>
   );
 };

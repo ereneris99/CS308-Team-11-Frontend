@@ -21,12 +21,15 @@ const SongsList = props => {
         <SongItem
           key={song._id}
           id={song._id}
-          image={song.imageUrl}
+          //image={song.imageUrl}
           title={song.title}
           album={song.album}
           performer={song.performer}
+          rating={song.rating}
+          genre={song.genre}
           creatorId={song.creator}
           onDelete={props.onDeleteSong} // Assuming onDeleteSong is a prop passed to SongsList
+          onLikeToggle={props.onLikeToggle}
         />
       ))}
     </ul>
