@@ -38,7 +38,7 @@ const NewSong = () => {
       rating: {
         value: '',
         isValid: true // Set initial validity to true for optional field
-      }
+      } 
       
     },
     false
@@ -61,7 +61,8 @@ const NewSong = () => {
         title: formState.inputs.title.value,
         performer: formState.inputs.performer.value.split(','), // Splitting by comma for multiple performers
         album: formState.inputs.album.value,
-        rating: formState.inputs.rating.value
+        rating: formState.inputs.rating.value,
+        genre: formState.inputs.genre.value
       };
 
       await sendRequest(

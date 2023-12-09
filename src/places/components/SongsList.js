@@ -21,15 +21,17 @@ const SongsList = props => {
         <SongItem
           key={song._id}
           id={song._id}
-          //image={song.imageUrl}
           title={song.title}
           album={song.album}
           performer={song.performer}
-          rating={song.rating}
+          rating={song.ratings}
+          userRating={song.userRating} // Pass the user's specific rating
           genre={song.genre}
           creatorId={song.creator}
-          onDelete={props.onDeleteSong} // Assuming onDeleteSong is a prop passed to SongsList
+          onDelete={props.onDeleteSong}
           onLikeToggle={props.onLikeToggle}
+          showAverageRating={props.showAverageRating}
+          showUserRating={props.showUserRating} // Add this to control the display of average rating
         />
       ))}
     </ul>

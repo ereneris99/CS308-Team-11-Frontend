@@ -12,19 +12,13 @@ import './SongItem.css';
 const SongItem = props => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
-  const [isLiked, setIsLiked] = useState(props.isInitiallyLiked); // Initialize based on prop
+  const [isLiked, setIsLiked] = useState(props.isInitiallyLiked);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const showDeleteWarningHandler = () => {
-    setShowConfirmModal(true);
-  };
-
-  const cancelDeleteHandler = () => {
-    setShowConfirmModal(false);
-  };
+  const showDeleteWarningHandler = () => setShowConfirmModal(true);
+  const cancelDeleteHandler = () => setShowConfirmModal(false);
 
   const confirmDeleteHandler = async () => {
-    console.log('Deleting song with ID:', props.id);
     setShowConfirmModal(false);
     try {
       await sendRequest(
@@ -48,11 +42,27 @@ const SongItem = props => {
       );
       props.onLikeToggle(props.id);
     } catch (err) {
-      setIsLiked(prev => !prev); // Revert the like state in case of an error
+      setIsLiked(prev => !prev);
     }
   };
 
-  const displayRating = props.rating ? `${props.rating}/10` : "No rating";
+  const calculateAverageRating = (ratings) => {
+    if (!ratings || ratings.length === 0) return "No rating";
+    const total = ratings.reduce((acc, ratingObj) => acc + ratingObj.rating, 0);
+    return (total / ratings.length).toFixed(1);
+  };
+
+  const displayAverageRating = props.showAverageRating ? (
+    <p>Average Rating: {calculateAverageRating(props.rating)}</p>
+  ) : null;
+
+  const displayPerformerNames = (performers) => {
+    return performers.map(performer => performer.name).join(', ') || "Unknown Performer";
+  };
+
+  const albumName = props.album ? props.album.name : "Unknown Album";
+  const performerNames = displayPerformerNames(props.performer);
+  //const userRatingDisplay = props.userRating ? `${props.userRating}/10` : "Not rated";
 
   return (
     <React.Fragment>
@@ -76,10 +86,11 @@ const SongItem = props => {
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="song-item__info">
             <h2>{props.title}</h2>
-            <h3>Album: {props.album.name}</h3>
-            <p>Performer: {props.performer.name}</p>
-            <p>Genre: {props.genre || "Unknown"}</p>
-            <p>Rating: {displayRating}</p>
+            <h3>Album: {albumName}</h3>
+            <p>Performer: {performerNames}</p>
+            <p>Genre: {props.genre}</p>
+            {displayAverageRating}
+            {auth.isLoggedIn && <p>Your Rating: {props.userRating ? `${props.userRating}/10` : "Not rated"}</p>}
           </div>
           <div className="song-item__actions">
             {auth.isLoggedIn && (

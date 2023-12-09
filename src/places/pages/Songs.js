@@ -6,14 +6,13 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const Songs = () => {
-  const {isLoading,error,sendRequest,clearError} = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loadedSongs, setLoadedSongs] = useState();
 
   useEffect(() => {
     const fetchSongs = async () => {
       try {
         const responseData = await sendRequest('http://localhost:3000/songs');
-
         setLoadedSongs(responseData.songs);
       } catch (err) {}
     };
@@ -21,8 +20,7 @@ const Songs = () => {
   }, [sendRequest]);
 
   const songDeletedHandler = deletedSongId => {
-    setLoadedSongs(prevSongs => prevSongs.filter(song => song._id !== deletedSongId)
-    );
+    setLoadedSongs(prevSongs => prevSongs.filter(song => song._id !== deletedSongId));
   };
 
   return (
@@ -33,7 +31,13 @@ const Songs = () => {
           <LoadingSpinner />
         </div>
       )}
-      {!isLoading && loadedSongs && <SongsList items={loadedSongs} onDeleteSong = {songDeletedHandler} />}
+      {!isLoading && loadedSongs && (
+        <SongsList 
+          items={loadedSongs} 
+          onDeleteSong={songDeletedHandler} 
+          showAverageRating={true} // Show average rating in this context
+        />
+      )}
     </React.Fragment>
   );
 };

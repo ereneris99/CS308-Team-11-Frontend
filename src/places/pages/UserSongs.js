@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+//import { useParams } from 'react-router-dom';
 
 import SongsList from '../components/SongsList';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -14,43 +14,55 @@ const UserSongs = () => {
 const auth = useContext(AuthContext);
 const [loadedSongs, setLoadedSongs] = useState();
 const {isLoading,error,sendRequest,clearError}=useHttpClient();
+/*
 const updateSongsAfterLikeToggle = (songId) => {
   setLoadedSongs(prevSongs => 
     prevSongs.filter(song => song._id !== songId)
   );
-};
+}; */
 
-  const userId = useParams().userId;
+  //const userId = useParams().userId;
 
   useEffect(() => {
-    const fetchSongs = async () => {
+    const fetchRatedSongs = async () => {
       try {
         const responseData = await sendRequest(
-          `http://localhost:3000/list-likesong`,
+          `http://localhost:3000/rated-songs`,
           'GET',
-          null, // No body for GET request
-          {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + auth.token // Include the auth token
-          }
+          null,
+          { 'Authorization': 'Bearer ' + auth.token }
         );
-        setLoadedSongs(responseData.likesongs); // Update to 'likesongs'
-      } catch (err) {
-        // Handle errors if necessary
-      }
+        setLoadedSongs(responseData.ratedSongs);
+      } catch (err) {}
     };
-    fetchSongs();
-  }, [sendRequest, userId, auth.token]);
+    fetchRatedSongs();
+  }, [sendRequest, auth.token]);
 
  
+  const songDeletedHandler = deletedSongId => {
+    setLoadedSongs(prevSongs => prevSongs.filter(song => song._id !== deletedSongId)
+    );
+  };
+
   return <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && (<div 
         className="center"><LoadingSpinner />
       </div>
       )}
-      {!isLoading && loadedSongs && <SongsList items={loadedSongs} onLikeToggle={updateSongsAfterLikeToggle}  />}
+      {!isLoading && loadedSongs && <SongsList items={loadedSongs} onDeleteSong = {songDeletedHandler} showAverageRating={false}/>}
     </React.Fragment>;
 };
 
 export default UserSongs;
+
+
+
+
+
+
+
+
+
+
+
