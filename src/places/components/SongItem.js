@@ -31,20 +31,6 @@ const SongItem = props => {
     } catch (err) {}
   };
 
- /* const toggleLikeHandler = async () => {
-    setIsLiked(prev => !prev);
-    try {
-      await sendRequest(
-        `http://localhost:3000/like-song/${props.id}`,
-        'POST',
-        null,
-        { Authorization: 'Bearer ' + auth.token }
-      );
-      props.onLikeToggle(props.id);
-    } catch (err) {
-      setIsLiked(prev => !prev);
-    }
-  }; */
 
   const handleRateSong = async () => {
     const rating = prompt("Enter your rating (1-10):");
@@ -131,3 +117,25 @@ const SongItem = props => {
 };
 
 export default SongItem;
+
+
+
+
+
+
+
+
+/* const toggleLikeHandler = async () => {
+    setIsLiked(prev => !prev);
+    try {
+      await sendRequest(
+        `http://localhost:3000/like-song/${props.id}`,
+        'POST',
+        null,
+        { Authorization: 'Bearer ' + auth.token }
+      );
+      props.onLikeToggle(props.id);
+    } catch (err) {
+      setIsLiked(prev => !prev);
+    }
+  }; */

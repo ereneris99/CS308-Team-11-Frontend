@@ -10,6 +10,7 @@ import Users from './user/pages/Users';
 import NewPlace from './places/pages/NewSong';
 import UserSongs from './places/pages/UserSongs';
 import UpdatePlace from './places/pages/UpdateSong';
+import AnalysisPage from './places/pages/AnalysisPage.js'; // Import the AnalysisPage component
 import Auth from './user/pages/Auth';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
@@ -49,6 +50,9 @@ const App = () => {
         </Route>
         <Route path="/places/:placeId">
           <UpdatePlace />
+        </Route>
+        <Route path="/analysis"> {/* New route for AnalysisPage */}
+          <AnalysisPage />
         </Route>
         <Redirect to="/" />
       </Switch>
