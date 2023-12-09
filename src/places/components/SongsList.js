@@ -19,19 +19,20 @@ const SongsList = props => {
     <ul className="songs-list">
       {props.items.map(song => (
         <SongItem
-          key={song._id}
-          id={song._id}
-          title={song.title}
-          album={song.album}
-          performer={song.performer}
-          rating={song.ratings}
-          userRating={song.userRating} // Pass the user's specific rating
-          genre={song.genre}
-          creatorId={song.creator}
-          onDelete={props.onDeleteSong}
-          onLikeToggle={props.onLikeToggle}
-          showAverageRating={props.showAverageRating}
-          showUserRating={props.showUserRating} // Add this to control the display of average rating
+        key={song._id}
+        id={song._id}
+        title={song.title}
+        album={song.album}
+        performer={song.performer}
+        rating={song.ratings}
+        userRating={song.userRating} // Pass the user's specific rating
+        genre={song.genre}
+        creatorId={song.creator}
+        onDelete={props.onDeleteSong}
+        onLikeToggle={props.onLikeToggle}
+        onRate={props.onRate} // Pass the onRate function to each SongItem
+        showAverageRating={props.showAverageRating}
+        showUserRating={props.showUserRating} // Add this to control the display of average rating
         />
       ))}
     </ul>

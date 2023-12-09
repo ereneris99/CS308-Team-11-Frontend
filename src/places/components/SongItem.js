@@ -12,7 +12,7 @@ import './SongItem.css';
 const SongItem = props => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
-  const [isLiked, setIsLiked] = useState(props.isInitiallyLiked);
+  //const [isLiked, setIsLiked] = useState(props.isInitiallyLiked);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const showDeleteWarningHandler = () => setShowConfirmModal(true);
@@ -31,7 +31,7 @@ const SongItem = props => {
     } catch (err) {}
   };
 
-  const toggleLikeHandler = async () => {
+ /* const toggleLikeHandler = async () => {
     setIsLiked(prev => !prev);
     try {
       await sendRequest(
@@ -43,6 +43,29 @@ const SongItem = props => {
       props.onLikeToggle(props.id);
     } catch (err) {
       setIsLiked(prev => !prev);
+    }
+  }; */
+
+  const handleRateSong = async () => {
+    const rating = prompt("Enter your rating (1-10):");
+    if (rating && !isNaN(rating) && rating >= 1 && rating <= 10) {
+      try {
+        await sendRequest(
+          `http://localhost:3000/rate-song/${props.id}`,
+          'PUT',
+          JSON.stringify({ rating: parseInt(rating, 10) }),
+          {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + auth.token
+          }
+        );
+        // Call the onRate prop function to notify the parent component
+        props.onRate();
+      } catch (err) {
+        console.error("Failed to submit rating:", err);
+      }
+    } else {
+      alert("Please enter a valid rating between 1 and 10.");
     }
   };
 
@@ -62,7 +85,6 @@ const SongItem = props => {
 
   const albumName = props.album ? props.album.name : "Unknown Album";
   const performerNames = displayPerformerNames(props.performer);
-  //const userRatingDisplay = props.userRating ? `${props.userRating}/10` : "Not rated";
 
   return (
     <React.Fragment>
@@ -93,14 +115,11 @@ const SongItem = props => {
             {auth.isLoggedIn && <p>Your Rating: {props.userRating ? `${props.userRating}/10` : "Not rated"}</p>}
           </div>
           <div className="song-item__actions">
-            {auth.isLoggedIn && (
-              <Button inverse onClick={toggleLikeHandler}>
-                {isLiked ? 'Unlike' : 'Like'}
-              </Button>
+           
+            {auth.isLoggedIn && props.userRating === null && (
+              <Button onClick={handleRateSong}>Rate</Button>
             )}
-            {auth.isLoggedIn && (
-              <Button to={`/songs/${props.id}`}>EDIT</Button>
-            )}
+            
             {auth.isLoggedIn && (
               <Button danger onClick={showDeleteWarningHandler}>DELETE</Button>
             )}

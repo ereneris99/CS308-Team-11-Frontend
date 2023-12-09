@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../../shared/context/auth-context';
 
 import SongsList from '../components/SongsList';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../../shared/hooks/http-hook';
-
+import { AuthContext } from '../../shared/context/auth-context';
 
 const Songs = () => {
   const auth = useContext(AuthContext); // Using AuthContext to access the token
@@ -21,7 +20,6 @@ const Songs = () => {
           null,
           { Authorization: 'Bearer ' + auth.token }
         );
-        console.log(responseData.songs); // Log to check the structure
         setLoadedSongs(responseData.songs);
       } catch (err) {
         console.error(err);
@@ -32,6 +30,20 @@ const Songs = () => {
 
   const songDeletedHandler = deletedSongId => {
     setLoadedSongs(prevSongs => prevSongs.filter(song => song._id !== deletedSongId));
+  };
+
+  const updateSongRating = async () => {
+    try {
+      const responseData = await sendRequest(
+        'http://localhost:3000/songs',
+        'GET',
+        null,
+        { Authorization: 'Bearer ' + auth.token }
+      );
+      setLoadedSongs(responseData.songs);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -46,6 +58,7 @@ const Songs = () => {
         <SongsList 
           items={loadedSongs} 
           onDeleteSong={songDeletedHandler} 
+          onRate={updateSongRating}
           showAverageRating={true}
         />
       )}
