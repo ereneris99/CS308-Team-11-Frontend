@@ -45,8 +45,7 @@ const SongItem = props => {
             Authorization: 'Bearer ' + auth.token
           }
         );
-        // Call the onRate prop function to notify the parent component
-        props.onRate();
+        props.onRate(props.id, parseInt(rating, 10));
       } catch (err) {
         console.error("Failed to submit rating:", err);
       }

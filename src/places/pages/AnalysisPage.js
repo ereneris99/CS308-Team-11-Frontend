@@ -41,11 +41,13 @@ const AnalysisPage = () => {
           Authorization: 'Bearer ' + auth.token
         }
       );
+  
       const favoriteSongsWithUserRating = responseData.favoriteSongs.map(song => {
-        const userRatingObj = song.ratings.find(rating => rating.user === auth.userId);
+        // Safely access the user's rating
+        const userRatingObj = song.ratings.find(rating => rating.user && rating.user._id.toString() === auth.userId);
         return {
           ...song,
-          userRating: userRatingObj ? userRatingObj.rating : null
+          
         };
       });
       setLoadedSongs(favoriteSongsWithUserRating); // Update the state with the fetched songs
@@ -53,6 +55,7 @@ const AnalysisPage = () => {
       // Error handling
     }
   };
+  
 
   return (
     <React.Fragment>
@@ -72,7 +75,7 @@ const AnalysisPage = () => {
           See Your Top Rated Songs by Genre
         </Button>
       </form>
-      {!isLoading && loadedSongs && <SongsList items={loadedSongs} />}
+      {!isLoading && loadedSongs &&(console.log(loadedSongs),    <SongsList items={loadedSongs}/>)}
     </React.Fragment>
   );
 };
