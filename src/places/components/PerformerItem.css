@@ -1,0 +1,57 @@
+.performer-item {
+    margin: 1rem 0;
+    background-color: #121212; /* Spotify dark background */
+    color: #fff; /* Light text for contrast */
+    border-radius: 8px;
+  }
+  
+  .performer-item__content {
+    padding: 1rem;
+  }
+  
+  .performer-item__info {
+    text-align: center;
+  }
+  
+  .performer-item__info h2,
+  .performer-item__info h3,
+  .performer-item__info p {
+    margin: 0.5rem 0;
+    color: #000000; /* Spotify green for titles */
+  }
+  
+  .performer-item__actions {
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid #282828; /* Slightly lighter border for separation */
+  }
+  
+  .performer-item__actions button,
+  .performer-item__actions a {
+    margin: 0.5rem;
+    background-color: #1DB954; /* Spotify green for buttons */
+    color: #fff;
+    border: none;
+  }
+  
+  .performer-item__actions button:hover,
+  .performer-item__actions a:hover {
+    background-color: #1ED760; /* Lighter green on hover */
+  }
+  
+  .performer-item__modal-content {
+    padding: 0;
+    background-color: #121212; /* Consistent modal background */
+  }
+  
+  .performer-item__modal-actions {
+    text-align: right;
+    background-color: #121212; /* Consistent modal actions background */
+  }
+  
+  
+  @media (min-width: 768px) {
+    .performer-item__image {
+      height: 20rem;
+    } 
+  }
