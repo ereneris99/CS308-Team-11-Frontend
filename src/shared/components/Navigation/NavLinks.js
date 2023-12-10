@@ -36,6 +36,11 @@ const NavLinks = props => {
       )}
       {auth.isLoggedIn && (
         <li>
+          <NavLink to="/friends">FRIENDS</NavLink> {/* New NavLink for Albums page */}
+        </li>
+      )}
+      {auth.isLoggedIn && (
+        <li>
           <NavLink to="/u1/places">MY RATED SONGS</NavLink>
         </li>
       )}

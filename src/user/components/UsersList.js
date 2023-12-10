@@ -23,8 +23,8 @@ const UsersList = props => {
           id={user._id}
           email={user.email}
           password={user.password}
-          image={user.image}
-          likedsong={user.likedsong}
+          //image={user.image}
+          //likedsong={user.likedsong}
         />
       ))}
     </ul>

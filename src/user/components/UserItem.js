@@ -42,9 +42,13 @@ const UserItem = props => {
         <div className="user-item__details">
           <div className="user-item__info">
             <h2>{props.email}</h2>
-            <h3>{/* User details here */}</h3>
+            {/* Additional user details can be added here */}
           </div>
-          <Button onClick={followHandler} className="user-item__follow-button">Follow</Button>
+          {!props.isFriend && (
+            <Button onClick={followHandler} className="user-item__follow-button">
+              Follow
+            </Button>
+          )}
         </div>
       </Card>
     </li>

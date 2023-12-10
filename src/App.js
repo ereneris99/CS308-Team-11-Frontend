@@ -19,6 +19,7 @@ import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
 import Songs from './places/pages/Songs';
 import Welcome from './shared/pages/welcome';
+import Friends from './user/pages/Friends.js';
 
 
 const App = () => {
@@ -66,6 +67,9 @@ const App = () => {
         </Route>
         <Route path="/performers"> {/* New route for Albums page */}
           <Performers />
+        </Route>
+        <Route path="/friends" exact>
+          <Friends />
         </Route>
         <Redirect to="/" />
       </Switch>
