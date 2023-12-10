@@ -1,5 +1,4 @@
 import React from 'react';
-
 import SongItem from './SongItem';
 import Card from '../../shared/components/UIElements/Card';
 import './SongsList.css';

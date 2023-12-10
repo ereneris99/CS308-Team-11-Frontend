@@ -12,6 +12,7 @@ import UserSongs from './places/pages/UserSongs';
 import UpdatePlace from './places/pages/UpdateSong';
 import AnalysisPage from './places/pages/AnalysisPage.js'; // Import the AnalysisPage component
 import RecommendationPage from './places/pages/RecommendationPage';
+import Albums from './places/pages/Albums';
 import Auth from './user/pages/Auth';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
@@ -57,6 +58,9 @@ const App = () => {
         </Route>
         <Route path="/recommendations"> {/* New route for RecommendationPage */}
           <RecommendationPage />
+        </Route>
+        <Route path="/albums"> {/* New route for Albums page */}
+          <Albums />
         </Route>
         <Redirect to="/" />
       </Switch>

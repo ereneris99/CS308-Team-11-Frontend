@@ -40,11 +40,13 @@ const RecommendationPage = () => {
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      {!isLoading && recommendedSongs && (
+      {!isLoading && recommendedSongs.length > 0 ? (
         <SongsList
           items={recommendedSongs}
           onRate={handleSongRated}
         />
+      ) : (
+        !isLoading && <div className="center">No songs to recommend.</div>
       )}
     </React.Fragment>
   );

@@ -44,7 +44,7 @@ const AnalysisPage = () => {
   
       const favoriteSongsWithUserRating = responseData.favoriteSongs.map(song => {
         // Safely access the user's rating
-        const userRatingObj = song.ratings.find(rating => rating.user && rating.user._id.toString() === auth.userId);
+        //const userRatingObj = song.ratings.find(rating => rating.user && rating.user._id.toString() === auth.userId);
         return {
           ...song,
           

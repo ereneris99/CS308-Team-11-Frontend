@@ -6,9 +6,9 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
-import './SongItem.css';
+import './AlbumItem.css';
 
-const SongItem = props => {
+const AlbumItem = props => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   //const [isLiked, setIsLiked] = useState(props.isInitiallyLiked);
@@ -21,7 +21,7 @@ const SongItem = props => {
     setShowConfirmModal(false);
     try {
       await sendRequest(
-        `http://localhost:3000/admin/delete-song/${props.id}`,
+        `http://localhost:3000/admin/delete-album/${props.id}`,
         'DELETE',
         null,
         { Authorization: 'Bearer ' + auth.token }
@@ -31,12 +31,12 @@ const SongItem = props => {
   };
 
 
-  const handleRateSong = async () => {
+  const handleRateAlbum = async () => {
     const rating = prompt("Enter your rating (1-10):");
     if (rating && !isNaN(rating) && rating >= 1 && rating <= 10) {
       try {
         await sendRequest(
-          `http://localhost:3000/rate-song/${props.id}`,
+          `http://localhost:3000/rate-album/${props.id}`,
           'PUT',
           JSON.stringify({ rating: parseInt(rating, 10) }),
           {
@@ -67,7 +67,6 @@ const SongItem = props => {
     return performers.map(performer => performer.name).join(', ') || "Unknown Performer";
   };
 
-  const albumName = props.album ? props.album.name : "Unknown Album";
   const performerNames = displayPerformerNames(props.performer);
 
   return (
@@ -77,7 +76,7 @@ const SongItem = props => {
         show={showConfirmModal}
         onCancel={cancelDeleteHandler}
         header="Are you sure?"
-        footerClass="song-item__modal-actions"
+        footerClass="album-item__modal-actions"
         footer={
           <React.Fragment>
             <Button inverse onClick={cancelDeleteHandler}>CANCEL</Button>
@@ -85,23 +84,23 @@ const SongItem = props => {
           </React.Fragment>
         }
       >
-        <p>Do you want to proceed and delete this song? Please note that it can't be undone thereafter.</p>
+        <p>Do you want to proceed and delete this album? Please note that it can't be undone thereafter.</p>
       </Modal>
-      <li className="song-item">
-        <Card className="song-item__content">
+      <li className="album-item">
+        <Card className="album-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
-          <div className="song-item__info">
-            <h2>{props.title}</h2>
-            <h3>Album: {albumName}</h3>
+          <div className="album-item__info">
+            <h2>{props.name}</h2>
+            
             <p>Performer: {performerNames}</p>
-            <p>Genre: {props.genre}</p>
+            
             {displayAverageRating}
             {auth.isLoggedIn && <p>Your Rating: {props.userRating ? `${props.userRating}/10` : "Not rated"}</p>}
           </div>
-          <div className="song-item__actions">
+          <div className="album-item__actions">
            
             {auth.isLoggedIn && props.userRating === null && (
-              <Button onClick={handleRateSong}>Rate</Button>
+              <Button onClick={handleRateAlbum}>Rate</Button>
             )}
             
             {auth.isLoggedIn && (
@@ -114,26 +113,4 @@ const SongItem = props => {
   );
 };
 
-export default SongItem;
-
-
-
-
-
-
-
-
-/* const toggleLikeHandler = async () => {
-    setIsLiked(prev => !prev);
-    try {
-      await sendRequest(
-        `http://localhost:3000/like-song/${props.id}`,
-        'POST',
-        null,
-        { Authorization: 'Bearer ' + auth.token }
-      );
-      props.onLikeToggle(props.id);
-    } catch (err) {
-      setIsLiked(prev => !prev);
-    }
-  }; */
+export default AlbumItem;

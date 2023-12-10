@@ -1,18 +1,14 @@
-import React ,{useContext} from 'react';
-
+import React, { useContext, useState } from 'react';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import {
-  VALIDATOR_REQUIRE,
-  //VALIDATOR_MINLENGTH
-} from '../../shared/util/validators';
+import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
-import {AuthContext} from '../../shared/context/auth-context';
+import { AuthContext } from '../../shared/context/auth-context';
 import './SongForm.css';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from 'react-router-dom';
 
 const NewSong = () => {
   const auth = useContext(AuthContext);
@@ -33,33 +29,35 @@ const NewSong = () => {
       },
       genre: {
         value: '',
-        isValid: false // Set initial validity to true for optional field
+        isValid: false
       },
       rating: {
         value: '',
-        isValid: true // Set initial validity to true for optional field
-      } 
-      
+        isValid: true
+      }
     },
     false
   );
 
+  const [selectedFile, setSelectedFile] = useState(null);
   const history = useHistory();
+
+  const fileChangeHandler = event => {
+    if (event.target.files && event.target.files.length === 1) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
 
   const placeSubmitHandler = async event => {
     event.preventDefault();
-    const isFormValid = formState.inputs.title.isValid &&
-                        formState.inputs.album.isValid &&
-                        formState.inputs.performer.isValid;
-
-    if (!isFormValid) {
-      return; // Prevent form submission if required fields are not valid
+    if (!formState.isValid) {
+      return;
     }
 
     try {
       const songData = {
         title: formState.inputs.title.value,
-        performer: formState.inputs.performer.value.split(','), // Splitting by comma for multiple performers
+        performer: formState.inputs.performer.value.split(','),
         album: formState.inputs.album.value,
         rating: formState.inputs.rating.value,
         genre: formState.inputs.genre.value
@@ -76,7 +74,31 @@ const NewSong = () => {
       );
       history.push('/songs');
     } catch (err) {
-      // Error handling
+      console.error(err);
+    }
+  };
+
+  const fileSubmitHandler = async event => {
+    event.preventDefault();
+    if (!selectedFile) {
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      await sendRequest(
+        'http://localhost:3000/admin/add-file',
+        'POST',
+        formData,
+        {
+          Authorization: 'Bearer ' + auth.token
+        }
+      );
+      history.push('/songs');
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -85,6 +107,7 @@ const NewSong = () => {
       <ErrorModal error={error} onClear={clearError} />
       <form className="song-form" onSubmit={placeSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
+        
         <Input
           id="title"
           element="input"
@@ -129,8 +152,20 @@ const NewSong = () => {
           placeholder="Select Rating"
         />
         
-        <Button type="submit" disabled={!formState.inputs.title.isValid || !formState.inputs.album.isValid || !formState.inputs.performer.isValid || !formState.inputs.genre.isValid}>
+        <Button type="submit" disabled={!formState.isValid}>
           ADD SONG
+        </Button>
+      </form>
+
+      <form className="song-form" onSubmit={fileSubmitHandler}>
+        {isLoading && <LoadingSpinner asOverlay />}
+        {/* File upload input */}
+        <div className="form-control">
+          <label htmlFor="file">Upload CSV File</label>
+          <input type="file" id="file" onChange={fileChangeHandler} />
+        </div>
+        <Button type="submit" disabled={!selectedFile}>
+          ADD SONG BY FILE
         </Button>
       </form>
     </React.Fragment>
@@ -138,3 +173,4 @@ const NewSong = () => {
 };
 
 export default NewSong;
+
