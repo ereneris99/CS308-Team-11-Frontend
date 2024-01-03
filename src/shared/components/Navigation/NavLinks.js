@@ -1,14 +1,34 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useState } from 'react'; // New import for search bar
 
 import { AuthContext } from '../../context/auth-context';
 import './NavLinks.css';
 
 const NavLinks = props => {
   const auth = useContext(AuthContext);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    // Implement search functionality here
+    console.log('Searching for:', searchTerm);
+  };
 
   return (
     <ul className="nav-links">
+      {auth.isLoggedIn && (<li className="search-bar">
+        <input 
+          type="text" 
+          placeholder="Search..." 
+          value={searchTerm} 
+          onChange={handleSearchChange} 
+        />
+        <button onClick={handleSearchSubmit}>Search</button>
+      </li>)}
       {auth.isLoggedIn && (
       <li>
         <NavLink to="/" exact>

@@ -4,6 +4,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import SongsList from '../components/SongsList';
+import Card from '../../shared/components/UIElements/Card'
 
 const RecommendationPage = () => {
   const auth = useContext(AuthContext);
@@ -46,10 +47,16 @@ const RecommendationPage = () => {
           onRate={handleSongRated}
         />
       ) : (
-        !isLoading && <div className="center">No songs to recommend.</div>
+        !isLoading && (
+          <div className="center">
+            <Card>
+              <h2>No songs to recommend.</h2>
+            </Card>
+          </div>
+        )
       )}
     </React.Fragment>
   );
-};
+};;
 
 export default RecommendationPage;

@@ -74,7 +74,7 @@ const NewSong = () => {
       );
       history.push('/songs');
     } catch (err) {
-      console.error(err);
+      
     }
   };
 
@@ -98,7 +98,7 @@ const NewSong = () => {
       );
       history.push('/songs');
     } catch (err) {
-      console.error(err);
+     
     }
   };
 
