@@ -20,6 +20,8 @@ import { AuthContext } from './shared/context/auth-context';
 import Songs from './places/pages/Songs';
 import Welcome from './shared/pages/welcome';
 import Friends from './user/pages/Friends.js';
+import SearchResults from './places/pages/SearchResults.js';
+
 
 
 const App = () => {
@@ -46,6 +48,9 @@ const App = () => {
         </Route>
         <Route path="/songs" exact>
           <Songs />
+        </Route>
+        <Route path="/search-results" exact>
+        <SearchResults />
         </Route>
         <Route path="/:userId/places" exact>
           <UserSongs />
@@ -82,6 +87,9 @@ const App = () => {
         </Route>
         <Route path="/songs" exact>
           <Songs />
+        </Route>
+        <Route path="/search-results" exact>
+        <SearchResults />
         </Route>
         <Route path="/auth">
           <Auth />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, } from 'react';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -40,6 +40,7 @@ const NewSong = () => {
   );
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [spotifyTrackName, setSpotifyTrackName] = useState('');
   const history = useHistory();
 
   const fileChangeHandler = event => {
@@ -102,6 +103,28 @@ const NewSong = () => {
     }
   };
 
+  const addSongFromSpotifyHandler = async () => {
+    if (!spotifyTrackName) {
+      // Handle error: No track name provided
+      return;
+    }
+
+    try {
+      await sendRequest(
+        'http://localhost:3000/search-and-add',
+        'POST',
+        JSON.stringify({ trackName: spotifyTrackName }),
+        {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + auth.token
+        }
+      );
+      // Handle success: maybe clear input or show a message
+    } catch (err) {
+      // Handle error: Display error message or log
+    }
+  };
+
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -155,7 +178,24 @@ const NewSong = () => {
         <Button type="submit" disabled={!formState.isValid}>
           ADD SONG
         </Button>
+
+        <Input
+          id="spotifyTrack"
+          element="input"
+          type="text"
+          label="Spotify Song Name"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a song name."
+          onInput={(id, value, isValid) => setSpotifyTrackName(value)}
+        />
+        
+        <Button type="button" onClick={addSongFromSpotifyHandler}>
+          SEARCH AND ADD FROM SPOTIFY
+        </Button>
+
       </form>
+
+       
 
       <form className="song-form" onSubmit={fileSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
